@@ -10,8 +10,7 @@ include_once "connection.php";
 
 #Receber o arquivo do formulário
 $file = $_FILES['arquivo'];
-//  var_dump($file);
-//  exit;
+
 #Variáveis de validação
 $first_line = true;
 $imported_lines = 0;
@@ -19,7 +18,7 @@ $lines_not_imported = 0;
 $users_not_imported = "";
 
 #Verificar se é arquivo csv
-if($file['type'] == "text/csv"){
+if ($file['type'] == "text/csv") {
 
     $query_truncat = "TRUNCATE TABLE table_import;";
     $truncat = $conn->prepare($query_truncat);
@@ -30,10 +29,10 @@ if($file['type'] == "text/csv"){
     $data_file = fopen($file['tmp_name'], "r");
 
     #Percorrer os dados do arquivo
-    while($line = fgetcsv($data_file, 1000, ";")){
+    while ($line = fgetcsv($data_file, 1000, ";")) {
 
         #Como ignorar a primeira linha do Excel
-        if($first_line){
+        if ($first_line) {
             $first_line = false;
             continue;
         }
@@ -58,16 +57,16 @@ if($file['type'] == "text/csv"){
         $register_user->execute();
 
         #Verificar se cadastrou corretamente no banco de dados
-        if($register_user->rowCount()){
+        if ($register_user->rowCount()) {
             $imported_lines++;
-        }else{
+        } else {
             $lines_not_imported++;
             $users_not_imported = $users_not_imported . ", " . ($line[2] ?? "NULL");
         }
     }
 
     #Criar a mensagem com os CPF dos usuários não cadastrados no banco de dados
-    if(!empty($users_not_imported)){
+    if (!empty($users_not_imported)) {
         $users_not_imported = "Usuários não importados: $users_not_imported.";
     }
 
@@ -76,7 +75,7 @@ if($file['type'] == "text/csv"){
 
     #Redirecionar o usuário
     header("Location: index.php");
-}else{
+} else {
 
     #Mensagem de erro
     $_SESSION['msg'] = "<p style='color: #f00;'>Necessário enviar arquivo csv!</p>";
