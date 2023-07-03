@@ -10,8 +10,8 @@ include_once "connection.php";
 
 #Receber o arquivo do formulário
 $file = $_FILES['arquivo'];
- var_dump($file);
- exit;
+//  var_dump($file);
+//  exit;
 #Variáveis de validação
 $first_line = true;
 $imported_lines = 0;
